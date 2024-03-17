@@ -1,18 +1,15 @@
 import { sql } from '@vercel/postgres';
-import { unstable_noStore as noStore } from 'next/cache';
 import {
   CustomerField,
   CustomersTableType,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
   User,
+  Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
-
-const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
-const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
+import { unstable_noStore as noStore } from 'next/cache';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -171,7 +168,7 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-
+    
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
